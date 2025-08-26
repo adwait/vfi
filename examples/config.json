@@ -1,5 +1,5 @@
 {
-  "flip_signals": true,
+  "flip_assigns": true,
   "invert_logic": true,
   "change_constants": true,
   "randomize_assignments": false,

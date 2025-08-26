@@ -18,7 +18,6 @@ def main():
     parser.add_argument("--output", "-o", required=False, help="Output perturbed Verilog .v file")
     parser.add_argument("--config", "-c", required=True, help="Path to config JSON file")
     parser.add_argument("--seed", type=int, default=None, help="Random seed (overrides config)")
-    parser.add_argument("--print-ast", action="store_true", help="Print the AST structure of the input Verilog file and exit")
     args = parser.parse_args()
 
     # Load config
@@ -32,20 +31,31 @@ def main():
     ast, directives = parse([args.input])
     print("Parsed Verilog AST.")
 
-    if args.print_ast:
-        print("Printing AST structure (first 5 levels):")
-        print_ast(ast)
-        return
+    codegenerator = ASTCodeGenerator()
+    original_verilog = codegenerator.visit(ast)
+    with open(f"orig.{args.output}", "w") as f:
+        f.write(original_verilog)
 
     # Apply perturbations
     if config.flip_signals:
-        injector = FaultInjector(config=config)
         print("Applying signal flipping perturbation...")
-        injector.visit(ast)
+        flipper = AssignmentFlipper(config=config)
+        flipper.apply(ast)
+    if config.invert_logic:
+        print("Applying invert_logic perturbation...")
+        inverter = LogicInverter(config=config)
+        inverter.apply(ast)
+    if config.change_constants:
+        print("Applying change_constants perturbation...")
+        changer = ConstChanger(config=config)
+        changer.apply(ast)
+    if config.randomize_assignments:
+        print("Applying randomize_assignments perturbation...")
+        randomizer = AssignmentRandomizer(config=config)
+        randomizer.apply(ast)
 
     # Generate Verilog code from AST
-    codegen = ASTCodeGenerator()
-    verilog_code = codegen.visit(ast)
+    verilog_code = codegenerator.visit(ast)
     with open(args.output, "w") as f:
         f.write(verilog_code)
     print(f"Perturbed Verilog written to {args.output}")
