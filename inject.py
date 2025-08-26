@@ -9,7 +9,6 @@ from pyverilog.ast_code_generator.codegen import ASTCodeGenerator
 
 from config import FaultInjConfig
 from perturbations import *
-from utils import print_ast
 
 def main():
     """
@@ -21,6 +20,7 @@ def main():
     parser.add_argument("--output", "-o", required=False, help="Output perturbed Verilog .v file")
     parser.add_argument("--config", "-c", required=True, help="Path to config JSON file")
     parser.add_argument("--seed", type=int, default=None, help="Random seed (overrides config)")
+    parser.add_argument("--show-diff", "-s", action="store_true", help="Show diff between original and perturbed Verilog")
     args = parser.parse_args()
 
     # Load config
@@ -31,13 +31,13 @@ def main():
     print("Loaded config:")
     print(config.model_dump_json(indent=2))
 
-    ast, directives = parse([args.input])
+    ast, _ = parse([args.input])
     print("Parsed Verilog AST.")
 
     codegenerator = ASTCodeGenerator()
-    original_verilog = codegenerator.visit(ast)
-    with open(f"orig.{args.output}", "w") as f:
-        f.write(original_verilog)
+    original_verilog = None
+    if args.show_diff:
+        original_verilog = codegenerator.visit(ast)
 
     # Apply perturbations
     if config.flip_signals:
@@ -61,6 +61,19 @@ def main():
     verilog_code = codegenerator.visit(ast)
     with open(args.output, "w") as f:
         f.write(verilog_code)
+
+    if args.show_diff and original_verilog is not None:
+        import difflib
+        diff = difflib.unified_diff(
+            original_verilog.splitlines(keepends=True),
+            verilog_code.splitlines(keepends=True),
+            fromfile='original.v',
+            tofile='perturbed.v'
+        )
+        with open("diff.txt", "w") as df:
+            df.writelines(diff)
+        print("Diff written to diff.txt")
+
     print(f"Perturbed Verilog written to {args.output}")
 
 if __name__ == "__main__":
