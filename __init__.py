@@ -1,0 +1,1 @@
+# faultinj package initialization

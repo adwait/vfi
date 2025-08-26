@@ -1,0 +1,7 @@
+{
+  "flip_signals": true,
+  "invert_logic": true,
+  "change_constants": true,
+  "randomize_assignments": false,
+  "seed": 42
+}
