@@ -1,3 +1,7 @@
+# config.py
+# 
+# Author: Adwait Godbole (adwait@berkeley.edu)
+
 from pydantic import BaseModel, Field
 from typing import Optional
 import json

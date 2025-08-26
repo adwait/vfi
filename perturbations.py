@@ -1,8 +1,10 @@
 # perturbations.py
 # This module will contain functions for different fault injection strategies.
+# 
+# Author: Adwait Godbole (adwait@berkeley.edu)
 
 import random
-from pyverilog.vparser.ast import Node, Unot, Rvalue, IntConst, Assign
+from pyverilog.vparser.ast import Node, Unot, Rvalue, IntConst
 from pyverilog.dataflow.visit import NodeVisitor
 
 class Perturber(NodeVisitor):

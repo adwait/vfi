@@ -1,11 +1,14 @@
 # inject.py
 # Main entry point for the fault injection tool.
+# 
+# Author: Adwait Godbole (adwait@berkeley.edu)
 
 import argparse
-from config import FaultInjConfig
-from perturbations import *
 from pyverilog.vparser.parser import parse
 from pyverilog.ast_code_generator.codegen import ASTCodeGenerator
+
+from config import FaultInjConfig
+from perturbations import *
 from utils import print_ast
 
 def main():

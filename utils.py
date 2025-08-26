@@ -1,3 +1,7 @@
+# utils.py
+# 
+# Author: Adwait Godbole (adwait@berkeley.edu)
+
 def print_ast(node, indent=0, max_depth=5):
     """
     Recursively print the pyverilog AST structure for exploration.
