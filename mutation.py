@@ -259,7 +259,7 @@ class SmartVerilogMutation:
                         meta_info = {
                             "mutation_id": test_count,
                             "category": mutation["category"],
-                            "match": match,
+                            "match": [match],
                             "original_line": line.strip(),
                             "mutated_line": modified_line.strip()
                         }
@@ -280,7 +280,7 @@ class SmartVerilogMutation:
                         meta_info = {
                             "mutation_id": test_count,
                             "category": mutation["category"],
-                            "match": match,
+                            "match": my_matchs,
                             "original_line": line.strip(),
                             "mutated_line": modified_line.strip()
                         }

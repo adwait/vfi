@@ -43,7 +43,7 @@ def fault_inject(input_files: list[str], config: FaultInjConfig) -> str:
     # Generate Verilog code from AST
     return codegenerator.visit(ast)
 
-def fault_inject_svm(input_file: str, output_dir: str) -> int:
+def fault_inject_svm(input_file: str, output_dir: str) -> dict:
     """
     Main fault injection function.
     Parses the input Verilog file, applies smartVerilog mutation testing,
