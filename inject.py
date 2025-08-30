@@ -10,7 +10,7 @@ from pyverilog.ast_code_generator.codegen import ASTCodeGenerator
 from config import FaultInjConfig
 from perturbations import *
 
-def fault_inject(input_files, config: FaultInjConfig) -> str:
+def fault_inject(input_files: list[str], config: FaultInjConfig) -> str:
     """
     Main fault injection function.
     Parses the input Verilog file, applies perturbations based on the config,
