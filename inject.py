@@ -52,8 +52,8 @@ def fault_inject_svm(input_file: str, output_dir: str) -> int:
     # Run SmartVerilog mutation testing
     print("Using SmartVerilog mutation module...")
     mutation_tool = SmartVerilogMutation(input_file, output_dir)
-    file_count = mutation_tool.run()
-    return file_count
+    metadata = mutation_tool.run()
+    return metadata
 
 def main():
     """

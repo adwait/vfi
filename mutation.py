@@ -225,6 +225,8 @@ class SmartVerilogMutation:
         
         test_count = 0
 
+        metadata = {}
+
         for line in self.code_lines:
             mutated_lines = []
             self.is_in_always_block(line)  # update always block status
@@ -253,10 +255,15 @@ class SmartVerilogMutation:
                         # print(f"The match is: {match}")
                         # print(f"The pattern is: {mutation['category']}")
                         # print(f"Mutations: {line.strip()} -> {modified_line.strip()}")
-                        comment = f"// This is mutation {test_count} for {mutation['category']}\n"
-                        comment += f"// The match is: {match}\n"
-                        comment += f"// The pattern is: {mutation['category']}\n"
-                        comment += f"// Mutations: {line.strip()} -> {modified_line.strip()}\n"
+                        comment = ""
+                        meta_info = {
+                            "mutation_id": test_count,
+                            "category": mutation["category"],
+                            "match": match,
+                            "original_line": line.strip(),
+                            "mutated_line": modified_line.strip()
+                        }
+                        metadata[test_count] = meta_info
                         self.write_to_file(test_count, line, modified_line, comment)
                 else:   
                     if len(re.findall(mutation["pattern"], line))>0:
@@ -269,13 +276,18 @@ class SmartVerilogMutation:
                         # print("The pattern is: "+mutation["category"])
                         # print("Muations: "+line + " -> " + modified_line)
                         # then we should write the modified line to the file
-                        comment = f"// This is mutation {test_count} for {mutation['category']}\n"
-                        comment += f"// The match is: {my_matchs}\n"
-                        comment += f"// The pattern is: {mutation['category']}\n"
-                        comment += f"// Mutations: {line.strip()} -> {modified_line.strip()}\n"
+                        comment = ""
+                        meta_info = {
+                            "mutation_id": test_count,
+                            "category": mutation["category"],
+                            "match": match,
+                            "original_line": line.strip(),
+                            "mutated_line": modified_line.strip()
+                        }
+                        metadata[test_count] = meta_info
                         self.write_to_file(test_count, line, modified_line, comment)
         
-        return test_count
+        return metadata
         
     def run(self):
         self.load_verilog()
@@ -283,8 +295,7 @@ class SmartVerilogMutation:
         # print("Generating mutants...")
         # for muation in self.mutations:
         #     print(muation)
-        file_count=self.generate_mutants()
-        return file_count
+        return self.generate_mutants()
 
 def write_assertion_file(input_file, output_file, assertions):
     try:
