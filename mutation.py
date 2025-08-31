@@ -186,6 +186,12 @@ class SmartVerilogMutation:
         # Below is unmatch rule
         self.unmatched_rules.append("always")
         self.unmatched_rules.append("//")
+        self.unmatched_rules.append("input")
+        self.unmatched_rules.append("output")
+        self.unmatched_rules.append("inout")
+        self.unmatched_rules.append("localparam")
+        self.unmatched_rules.append("parameter")
+        self.unmatched_rules.append("wire")
         print(f"Generated {len(self.mutations)} mutation rules.")
 
     def is_in_always_block(self, line):
